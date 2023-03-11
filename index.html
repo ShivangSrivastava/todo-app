@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do App</title>
+    <!-- Tailwind CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.2/tailwind.min.css">
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-4xl mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">To-Do List</h1>
+        <form id="add-form" class="flex mb-4">
+            <input id="add-input" type="text" class="px-4 py-2 border rounded-l-lg w-full" placeholder="Add a new task...">
+            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-r-lg hover:bg-blue-600">Add</button>
+        </form>
+        <ul id="task-list" class="space-y-2">
+            <!-- Tasks will be added dynamically here -->
+        </ul>
+    </div>
+
+    <script>
+        const form = document.getElementById('add-form');
+        const input = document.getElementById('add-input');
+        const list = document.getElementById('task-list');
+
+        let tasks = [];
+
+        function addTask(event) {
+            event.preventDefault();
+
+            const task = input.value.trim();
+
+            if (task !== '') {
+                tasks.push(task);
+                renderTasks();
+                input.value = '';
+                input.focus();
+            }
+        }
+
+        function deleteTask(index) {
+            tasks.splice(index, 1);
+            renderTasks();
+        }
+
+        function renderTasks() {
+            list.innerHTML = '';
+
+            tasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'bg-white px-4 py-2 flex justify-between items-center';
+
+                const text = document.createTextNode(task);
+                li.appendChild(text);
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600';
+                button.innerHTML = 'Delete';
+                button.addEventListener('click', () => deleteTask(index));
+
+                li.appendChild(button);
+
+                list.appendChild(li);
+            });
+        }
+
+        form.addEventListener('submit', addTask);
+    </script>
+</body>
+</html>
